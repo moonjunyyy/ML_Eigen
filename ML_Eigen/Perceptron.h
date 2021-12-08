@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <Eigen/Dense>
+#include "activation.h"
 
 class EigenBinaryClassifyPerceptrons
 {
@@ -26,7 +27,7 @@ public:
 	// private
 	Eigen::MatrixXd grad_W; // = new double[nOut][nIn];
 	Eigen::VectorXd grad_b; // = new double[nOut];
-	Eigen::MatrixXd dY;		// = new double[minibatchSize][nOut];
+	std::vector<Eigen::MatrixXd> dY;		// = new double[minibatchSize][nOut];
 	Eigen::MatrixXd W;		//
 	Eigen::VectorXd b;		//
 
@@ -52,7 +53,7 @@ public:
 			for (j = 0; j < nIn; j++) grad_W(i, j) = 0.0; // initialize grad_W, grad_b
 		}
 
-		dY.resize(minibatchSize, nOut);
+		dY.resize(minibatchSize);
 	}
 	EigenLogisticRegression(int n, int nO) {
 		nIn = n;
@@ -75,10 +76,10 @@ public:
 			for (j = 0; j < nIn; j++) grad_W(i, j) = 0.0; // initialize grad_W, grad_b
 		}
 
-		dY.resize(minibatchSize, nOut);
+		dY.resize(minibatchSize);
 	}
 
-	void train(double** X, int** T, int minibatchSize, double learningRate);
-	double* output(double* x);
-	int* predict(double* x);
+	void train(std::vector<Eigen::VectorXd> x, std::vector<Eigen::VectorXi> T, int minibatchSize, double learningRate);
+	void output(Eigen::VectorXd x, Eigen::VectorXd& y);
+	void predict(Eigen::VectorXd x, Eigen::VectorXi& y);
 };

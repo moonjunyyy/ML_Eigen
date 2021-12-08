@@ -13,7 +13,7 @@ double activation::sigmoid(double x) {
 	return 1. / (1. + pow(2.71828, -x));
 }
 
-std::vector<double> activation::softmod(std::vector<double> x)
+std::vector<double> activation::softmax(std::vector<double> x)
 {
 	std::vector<double> buf;
 	buf.resize(x.size());
@@ -34,10 +34,9 @@ std::vector<double> activation::softmod(std::vector<double> x)
 	return buf;
 }
 
-Eigen::VectorXd activation::softmod(Eigen::VectorXd x)
+void activation::softmax(Eigen::VectorXd x, Eigen::VectorXd& y)
 {
-	Eigen::VectorXd buf;
-	buf.resize(x.size());
+	y.resize(x.size());
 	double max = 0.;
 	double sum = 0.;
 
@@ -45,14 +44,12 @@ Eigen::VectorXd activation::softmod(Eigen::VectorXd x)
 		if (max < d) max = d;
 
 	for (int i = 0; i < x.size(); i++) {
-		buf[i] = exp(x[i] - max);
-		sum += buf[i];
+		y[i] = exp(x[i] - max);
+		sum += y[i];
 	}
 	for (int i = 0; i < x.size(); i++) {
-		buf[i] /= sum;
+		y[i] /= sum;
 	}
-
-	return buf;
 }
 
 double* activation::softmax(double* x, int n) {

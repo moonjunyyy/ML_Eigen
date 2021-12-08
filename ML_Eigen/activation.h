@@ -4,10 +4,11 @@
 
 class activation
 {
+public:
 	int step(double);
 	double sigmoid(double);
-	std::vector<double> softmod(std::vector<double>);
-	Eigen::VectorXd softmod(Eigen::VectorXd);
+	std::vector<double> softmax(std::vector<double>);
+	void softmax(Eigen::VectorXd, Eigen::VectorXd&);
 	static double* softmax(double* x, int n);
 };
 
