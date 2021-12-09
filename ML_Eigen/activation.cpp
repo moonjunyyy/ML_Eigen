@@ -34,8 +34,9 @@ std::vector<double> activation::softmax(std::vector<double> x)
 	return buf;
 }
 
-void activation::softmax(Eigen::VectorXd x, Eigen::VectorXd& y)
+Eigen::VectorXd activation::softmax(Eigen::VectorXd x)
 {
+	Eigen::VectorXd y;
 	y.resize(x.size());
 	double max = 0.;
 	double sum = 0.;
@@ -50,6 +51,7 @@ void activation::softmax(Eigen::VectorXd x, Eigen::VectorXd& y)
 	for (int i = 0; i < x.size(); i++) {
 		y[i] /= sum;
 	}
+	return y;
 }
 
 double* activation::softmax(double* x, int n) {

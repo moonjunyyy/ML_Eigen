@@ -80,6 +80,6 @@ public:
 	}
 
 	void train(std::vector<Eigen::VectorXd> x, std::vector<Eigen::VectorXi> T, int minibatchSize, double learningRate);
-	void output(Eigen::VectorXd x, Eigen::VectorXd& y);
-	void predict(Eigen::VectorXd x, Eigen::VectorXi& y);
+	Eigen::VectorXd output(Eigen::VectorXd x);
+	Eigen::VectorXi predict(Eigen::VectorXd x);
 };

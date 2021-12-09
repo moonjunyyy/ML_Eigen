@@ -34,10 +34,9 @@ void EigenLogisticRegression::train(std::vector<Eigen::VectorXd> X, std::vector<
 {
 	for (int n = 0; n < minibatchSize; n++) {
 
-		Eigen::VectorXd predicted_Y_;
-		output(X[n], predicted_Y_);
+		Eigen::VectorXd predicted_Y_ = output(X[n]);
 
-		dY[n] = predicted_Y_ - T[n];
+		dY[n] = predicted_Y_ - T[n].cast<double>();
 		grad_W += dY[n] * X[n];
 		grad_b += dY[n];
 	}
@@ -47,26 +46,27 @@ void EigenLogisticRegression::train(std::vector<Eigen::VectorXd> X, std::vector<
 	b -= learningRate / minibatchSize * grad_b;
 }
 
-void EigenLogisticRegression::output(Eigen::VectorXd x, Eigen::VectorXd& y)
+Eigen::VectorXd EigenLogisticRegression::output(Eigen::VectorXd x)
 {
 	activation myAct;
 	Eigen::VectorXd R;
-	myAct.softmax(W * x + b, y);
+	R = myAct.softmax(W * x + b);
+	return R;
 }
 
-void EigenLogisticRegression::predict(Eigen::VectorXd x, Eigen::VectorXi& y)
+Eigen::VectorXi EigenLogisticRegression::predict(Eigen::VectorXd x)
 {
-	Eigen::VectorXd R;
-	output(x, R);
+	Eigen::VectorXi R;
+	output(x);
 	double max = 0.;
 	int index = 0;
 
-	for (int i = 0; i < R.size(); i++)
-		if (R(i) > max) { max = R(i); index = i; }
+	for (int i = 0; i < x.size(); i++)
+		if (x(i) > max) { max = x(i); index = i; }
 
-	for (int i = 0; i < R.size(); i++)
+	for (int i = 0; i < x.size(); i++)
 	{
-		if (i == index) { y[i] = 1; }
-		else { y[i] = 0; }
+		if (i == index) { R(i) = 1; }
+		else { R[i] = 0; }
 	}
 }
